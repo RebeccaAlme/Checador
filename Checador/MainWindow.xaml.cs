@@ -24,5 +24,17 @@ namespace Checador
         {
             InitializeComponent();
         }
+
+        private void btnEmpleados_Click(object sender, RoutedEventArgs e)
+        {
+            Empleados empleados = new Empleados();
+            empleados.Show();
+        }
+
+        private void btnCheck_Click(object sender, RoutedEventArgs e)
+        {
+            Check check = new Check();
+            check.Show();
+        }
     }
 }
