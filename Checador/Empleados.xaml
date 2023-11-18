@@ -3,10 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Checador"
         mc:Ignorable="d"
         Title="Empleados" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" Margin="29,204,34,15" Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Visibility="Hidden" />
+                <DataGridTextColumn Header="Nombres" Binding="{Binding Nombres}" />
+                <DataGridTextColumn Header="Apellidos" Binding="{Binding Apellidos}" />
+                <DataGridTextColumn Header="Num Empleado" Binding="{Binding Numero}" />
+                <DataGridTextColumn Header="Foto" Binding="{Binding Foto}" />
+                <DataGridTextColumn Header="Huella" Binding="{Binding Huella}" Visibility="Hidden" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBox x:Name="tbNombres"
+          VerticalAlignment="Top"
+          materialDesign:HintAssist.Hint="Nombres"
+          Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Column="1" Margin="29,37,379,0" />
+        <TextBox x:Name="tbApellidos"
+            VerticalAlignment="Top"
+            materialDesign:HintAssist.Hint="Apellidos"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Column="1" Margin="29,74,379,0" />
+        <TextBox x:Name="tbNumero"
+            VerticalAlignment="Top"
+            materialDesign:HintAssist.Hint="Numero de empleado"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Column="1" Margin="29,111,449,0" />
+        <Image Grid.Column="1" HorizontalAlignment="Left" Height="110" Margin="459,36,0,0" VerticalAlignment="Top" Width="106" Stretch="Fill"/>
+        <Button Grid.Column="1" x:Name="btnFoto" Content="Editar Foto" HorizontalAlignment="Left" Margin="459,153,0,0" VerticalAlignment="Top" Height="27" Width="107" FontWeight="Normal"/>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1" HorizontalAlignment="Left" Height="112" Margin="459,36,0,0" VerticalAlignment="Top" Width="107"/>
+        <Button Grid.Column="1" x:Name="btnCaptura" Content="Registrar Huella" HorizontalAlignment="Center" Margin="0,153,0,0" VerticalAlignment="Top" Height="27" Width="140" FontWeight="Normal" Click="Button_Click"/>
     </Grid>
 </Window>
