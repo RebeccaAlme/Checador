@@ -7,13 +7,85 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Checador"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="0,0,71,47">
-        <Button Content="Button" HorizontalAlignment="Left" Margin="189,189,0,0" VerticalAlignment="Top"/>
-        <TextBox
-          VerticalAlignment="Top"
-          materialDesign:HintAssist.Hint="Floating Hint"
-          Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="197,141,231,0" />
-        <Button Content="Button" HorizontalAlignment="Left" Margin="127,114,0,0" VerticalAlignment="Top"/>
+        Title="Pantalla inicial" Height="720" Width="1000">
+    <Grid VerticalAlignment="Bottom" Height="679">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="200*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.Background>
+            <ImageBrush ImageSource="Resources/wallpaper.png" Stretch="UniformToFill" />
+        </Grid.Background>
+
+        <materialDesign:Card Grid.Column="1" Margin="50,52,48,0" Height="434" VerticalAlignment="Top">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="140" />
+                    <RowDefinition
+                        Height="*" />
+                    <RowDefinition
+                        Height="Auto" />
+                </Grid.RowDefinitions>
+                <Image
+                    Source="Resources/edit-profile-vector-icon.jpg"
+                    Stretch="UniformToFill" Margin="2,0,2,241" Grid.RowSpan="2" />
+                <Button
+                    Grid.Row="1"
+                    Margin="0,0,10,243"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
+                    <materialDesign:PackIcon
+                        Kind="AccountEdit" />
+                </Button>
+                <StackPanel
+                            Grid.Row="1"
+                            Margin="8,56,8,0">
+                    <TextBlock
+                            FontWeight="Bold"><Run Language="es-mx" Text="Agregar o editar empleado"/></TextBlock>
+                    <TextBlock
+                            VerticalAlignment="Center"
+                            TextWrapping="Wrap" ><Run Text="Aquí se agrega o edita un empleado"/><Run Language="es-mx" Text="."/></TextBlock>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+        <materialDesign:Card Grid.Column="2" Margin="50,52,50,0" Height="434" VerticalAlignment="Top">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                Height="140" />
+                    <RowDefinition
+                Height="*" />
+                    <RowDefinition
+                Height="Auto" />
+                </Grid.RowDefinitions>
+                <Image
+            Source="Resources/huella.jpg"
+            Stretch="UniformToFill" Margin="2,0,2,241" Grid.RowSpan="2" />
+                <Button
+            Grid.Row="1"
+            Margin="0,0,10,243"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}">
+                    <materialDesign:PackIcon
+                Kind="Fingerprint" />
+                </Button>
+                <StackPanel
+                    Grid.Row="1"
+                    Margin="8,56,8,0">
+                    <TextBlock
+                    FontWeight="Bold"><Run Language="es-mx" Text="Checador"/></TextBlock>
+                    <TextBlock
+                    VerticalAlignment="Center"
+                    TextWrapping="Wrap" ><Run Text="Aquí "/><Run Language="es-mx" Text="el empleado puede checar su entrada y salida."/></TextBlock>
+                </StackPanel>
+            </Grid>
+        </materialDesign:Card>
+        <Rectangle Height="36" Stroke="Black" Fill="Black" VerticalAlignment="Top" Grid.ColumnSpan="4"/>
+        <Label Grid.Column="1" Content="Administración" HorizontalAlignment="Center" Margin="0,-13,0,0" VerticalAlignment="Top" FontSize="40" FontWeight="Bold" Background="Transparent" Foreground="#DDFFFFFF" Grid.ColumnSpan="2" Width="300"/>
     </Grid>
 </Window>

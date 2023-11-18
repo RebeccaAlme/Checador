@@ -106,6 +106,22 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\wallpaper.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\edit-user.jpg" />
+    <Resource Include="Resources\huella.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\edit-user2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\edit-profile-vector-icon.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\wallpaper.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
