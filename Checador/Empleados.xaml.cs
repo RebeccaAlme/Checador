@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,41 @@ namespace Checador
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void btnFoto_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbNumero.Text == "")
+            {
+                MessageBox.Show("El número de empleado es necesario.", "Error");
+                return;
+            }
+
+            OpenFileDialog openFileDialog  = new OpenFileDialog();
+            openFileDialog.Filter = "Archivos de imagen (.jpg)|*.jpg|All Files (*.*)|*.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.Multiselect = false;
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                tbUrlFoto.Text = "";
+                try
+                {
+                    BitmapImage foto = new BitmapImage();
+                    foto.BeginInit();
+                    foto.UriSource = new Uri(openFileDialog.FileName);
+                    foto.EndInit();
+                    foto.Freeze();
+
+                    imgFoto.Source = foto;
+                    tbUrlFoto.Text = "foto_" + tbNumero.Text + ".jpg";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar la imagen: " + ex.Message, "Error");
+                }
+            }
+                
         }
     }
 }
