@@ -1,5 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using Checador.Models;
+using Microsoft.Win32;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Checador.Services;
 
 namespace Checador
 {
@@ -68,6 +71,53 @@ namespace Checador
                 }
             }
                 
+        }
+
+        private void btnGuardar_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbNombres.Text == "") {
+                MessageBox.Show("El campo Nombres es necesario.", "Error Nombres");
+                return;
+            }
+            if (tbApellidos.Text == "")
+            {
+                MessageBox.Show("El campo Apellidos es necesario.", "Error Apellidos");
+                return;
+            }
+            if (tbNumero.Text == "")
+            {
+                MessageBox.Show("El campo Numero Empleado es necesario.", "Error Número Empleado");
+                return;
+            }
+
+            try
+            {
+                Empleado empleado = new Empleado();
+                empleado.Nombres = tbNombres.Text;
+                empleado.Apellidos = tbApellidos.Text;
+                empleado.Numero = tbNumero.Text;
+                empleado.Foto = tbUrlFoto.Text;
+                empleado.Huella = null;
+
+                string destino = @"C:\Users\petit\Downloads\eorc-admin docentes\checador_fotos\" + tbUrlFoto.Text;
+                File.Copy(imgFoto.Source.ToString().Replace("file:///",""), destino, true);
+                
+                int id = DatoEmpleado.AltaEmpleado(empleado);
+                if (id > 0) {
+                    MessageBox.Show("Empleado guardado correctamente.", "Todo bien :)");
+
+                    tbNombres.Text = "";
+                    tbApellidos.Text = "";
+                    tbNumero.Text = "";
+                    tbUrlFoto.Text = "";
+                    imgFoto.Source = null;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }
