@@ -114,10 +114,6 @@ namespace Checador
             dgEmpleados.DataContext = DatoEmpleado.MuestraEmpleados();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void dgEmpleados_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -151,6 +147,20 @@ namespace Checador
             {
                 MessageBox.Show("Error al cargar los datos: " + ex.Message, "Algo salio mal :(");
             }
+        }
+
+        EnrollmentControl enrollmentControl; // Para saber cuando alguna huella ya se registro.
+        private void btnCaptura_Click(object sender, RoutedEventArgs e)
+        {
+            if (enrollmentControl == null)
+            {
+                enrollmentControl = new EnrollmentControl();
+                //enrollmentControl._sender = this;
+            }
+
+            enrollmentControl.ShowDialog();
+            enrollmentControl.Dispose();
+            enrollmentControl = null;
         }
     }
 }
