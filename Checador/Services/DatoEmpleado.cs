@@ -16,7 +16,7 @@ namespace Checador.Services
     {
         public DatoEmpleado() { }
 
-        public static List<Empleado> MuestraEmpleado()
+        public static List<Empleado> MuestraEmpleados()
         {
             List<Empleado> listaEmpleados = new List<Empleado>();
 

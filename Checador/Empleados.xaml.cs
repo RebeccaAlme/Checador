@@ -28,21 +28,11 @@ namespace Checador
             InitializeComponent();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void btnFoto_Click(object sender, RoutedEventArgs e)
         {
             if (tbNumero.Text == "")
             {
-                MessageBox.Show("El número de empleado es necesario.", "Error");
+                MessageBox.Show("El número de empleado es necesario.", "Error Número de empleado");
                 return;
             }
 
@@ -67,7 +57,7 @@ namespace Checador
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error al cargar la imagen: " + ex.Message, "Error");
+                    MessageBox.Show("Error al cargar la imagen: " + ex.Message, "Algo salio mal :(");
                 }
             }
                 
@@ -86,7 +76,7 @@ namespace Checador
             }
             if (tbNumero.Text == "")
             {
-                MessageBox.Show("El campo Numero Empleado es necesario.", "Error Número Empleado");
+                MessageBox.Show("El campo Número Empleado es necesario.", "Error Número Empleado");
                 return;
             }
 
@@ -115,8 +105,51 @@ namespace Checador
             }
             catch (Exception ex)
             {
+                MessageBox.Show("Error al guardar el empleado: " + ex.Message, "Algo salio mal :(");
+            }
+        }
 
-                throw;
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            dgEmpleados.DataContext = DatoEmpleado.MuestraEmpleados();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void dgEmpleados_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Empleado empleado = (Empleado)dgEmpleados.SelectedItem;
+
+            try
+            {
+                if (empleado != null)
+                {
+                    tbNombres.Text = empleado.Nombres;
+                    tbApellidos.Text = empleado.Apellidos;
+                    tbNumero.Text = empleado.Numero;
+                    tbUrlFoto.Text = empleado.Foto;
+                }
+
+                if (empleado.Foto != "" && empleado.Foto != null)
+                {
+                    BitmapImage foto = new BitmapImage();
+                    foto.BeginInit();
+                    foto.UriSource = new Uri(@"C:\Users\petit\Downloads\eorc-admin docentes\checador_fotos\" + empleado.Foto);
+                    foto.EndInit();
+                    imgFoto.Source = foto;
+                }
+                else
+                {
+                    imgFoto.Source = null;
+                    tbUrlFoto.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar los datos: " + ex.Message, "Algo salio mal :(");
             }
         }
     }

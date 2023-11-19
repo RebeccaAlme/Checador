@@ -6,14 +6,14 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Checador"
         mc:Ignorable="d"
-        Title="Empleados" Height="450" Width="800">
+        Title="Empleados" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="8*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,217,145,15" Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid ItemsSource="{Binding}" x:Name="dgEmpleados" Margin="10,217,145,15" Grid.Column="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="dgEmpleados_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" Visibility="Hidden" />
                 <DataGridTextColumn Header="Nombres" Binding="{Binding Nombres}" />
