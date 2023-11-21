@@ -46,6 +46,7 @@ namespace Checador
         private void btnCheck_Click(object sender, RoutedEventArgs e)
         {
             Check check = new Check();
+            check._sender = new MainWindow();
             check.Show();
         }
     }

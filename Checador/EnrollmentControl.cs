@@ -24,7 +24,6 @@ namespace Checador
         {
             InitializeComponent();
         }
-
         
         private Reader currentReader;
         public Reader CurrentReader
@@ -176,7 +175,7 @@ namespace Checador
         /// <returns>Returns true if successful; false if unsuccessful</returns>
         public bool StartCaptureAsync(Reader.CaptureCallback OnCaptured)
         {
-            using (Tracer tracer = new Tracer("Form_Main::StartCaptureAsync"))
+            using (Tracer tracer = new Tracer("EnrollmentControl::StartCaptureAsync"))
             {
                 // Activate capture handler
                 currentReader.On_Captured += new Reader.CaptureCallback(OnCaptured);
@@ -323,90 +322,6 @@ namespace Checador
                 count = 0;
             }
         }
-
-
-        //public void OnCaptured(CaptureResult captureResult)
-        //{
-        //    try
-        //    {
-        //        // Check capture quality and throw an error if bad.
-        //        if (!CheckCaptureResult(captureResult)) return;
-
-        //        // Create bitmap
-        //        foreach (Fid.Fiv fiv in captureResult.Data.Views)
-        //        {
-        //            SendMessage(Action.SendBitmap, CreateBitmap(fiv.RawImage, fiv.Width, fiv.Height));
-        //        }
-
-        //        //Verification Code
-        //        try
-        //        {
-        //            // Check capture quality and throw an error if bad.
-        //            if (!CheckCaptureResult(captureResult)) return;
-
-        //            count++;
-
-        //            //SendMessage(Action.SendMessage, "A finger was captured.");
-        //            DataResult<Fmd> resultConversion = FeatureExtraction.CreateFmdFromFid(captureResult.Data, Constants.Formats.Fmd.ANSI);
-        //            SendMessage(Action.SendMessage, "A finger was captured.  \r\nCount:  " + (count));
-
-        //            if (resultConversion.ResultCode != Constants.ResultCode.DP_SUCCESS)
-        //            {
-        //                if (resultConversion.ResultCode != Constants.ResultCode.DP_TOO_SMALL_AREA)
-        //                {
-        //                    Reset = true;
-        //                }
-        //                throw new Exception(resultConversion.ResultCode.ToString());
-        //            }
-
-        //            firstFinger = resultConversion.Data;
-        //            conn.Close();
-        //            conn.Open();
-        //            SqlDataAdapter cmd = new SqlDataAdapter("Select * from  tblFinger", conn);
-        //            DataTable dt = new DataTable();
-        //            cmd.Fill(dt);
-        //            conn.Close();
-        //            List<string> lstledgerIds = new List<string>();
-        //            count = 0;
-        //            if (dt.Rows.Count > 0)
-        //            {
-        //                for (int i = 0; i < dt.Rows.Count; i++)
-        //                {
-        //                    lstledgerIds.Add(dt.Rows[i]["LedgerId"].ToString());
-        //                    Fmd val = Fmd.DeserializeXml(dt.Rows[i]["CustomerFinger"].ToString());
-        //                    CompareResult compare = Comparison.Compare(firstFinger, 0, val, 0);
-        //                    if (compare.ResultCode != Constants.ResultCode.DP_SUCCESS)
-        //                    {
-        //                        Reset = true;
-        //                        throw new Exception(compare.ResultCode.ToString());
-        //                    }
-        //                    if (Convert.ToDouble(compare.Score.ToString()) == 0)
-        //                    {
-        //                        MessageBox.Show("Ledger Id is : " + lstledgerIds[i].ToString());
-        //                        count++;
-        //                        break;
-        //                    }
-
-        //                }
-        //                if (count == 0)
-        //                {
-        //                    SendMessage(Action.SendMessage, "Fingerprint not registered.");
-        //                }
-
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            // Send error message, then close form
-        //            SendMessage(Action.SendMessage, "Error:  " + ex.Message);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Send error message, then close form
-        //        SendMessage(Action.SendMessage, "Error:  " + ex.Message);
-        //    }
-        //}
 
         /// <summary>
         /// Reset the UI causing the user to reselect a reader.

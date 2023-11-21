@@ -44,6 +44,7 @@ namespace Checador.Services
                                         empleado.Huella = (byte[])dr["Huella"];
                                     else
                                         empleado.Huella = null;
+                                    empleado.xmlFmd = dr["xmlFmd"].ToString();
                                     listaEmpleados.Add(empleado);
                                 }
                             }
@@ -75,6 +76,7 @@ namespace Checador.Services
                         cmd.Parameters.AddWithValue("@Numero", empleado.Numero);
                         cmd.Parameters.AddWithValue("@Foto", empleado.Foto);
                         cmd.Parameters.AddWithValue("@Huella", empleado.Huella);
+                        cmd.Parameters.AddWithValue("@xmlFmd", empleado.xmlFmd);
 
                         SqlParameter param = new SqlParameter("Id", SqlDbType.Int);
                         param.Value = 0;

@@ -16,5 +16,6 @@ namespace Checador.Models
         public string Numero {  get; set; }
         public string Foto { get; set;}
         public byte[] Huella { get; set;}
+        public string xmlFmd{ get; set; }
     }
 }

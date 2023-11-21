@@ -69,17 +69,22 @@ namespace Checador
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             if (tbNombres.Text == "") {
-                MessageBox.Show("El campo Nombres es necesario.", "Error Nombres");
+                MessageBox.Show("Es necesario el campo Nombres.", "Falta Nombres");
                 return;
             }
             if (tbApellidos.Text == "")
             {
-                MessageBox.Show("El campo Apellidos es necesario.", "Error Apellidos");
+                MessageBox.Show("Es necesario llenar el campo Apellidos.", "Falta Apellidos");
                 return;
             }
             if (tbNumero.Text == "")
             {
-                MessageBox.Show("El campo Número Empleado es necesario.", "Error Número Empleado");
+                MessageBox.Show("Es necesario el Número de Empleado.", "Falta Número Empleado");
+                return;
+            }
+            if (_sender == null || !_sender.Fmds.Any())
+            {
+                MessageBox.Show("Es necesario capturar una huella.", "Falta Captura Huella");
                 return;
             }
 
@@ -90,7 +95,8 @@ namespace Checador
                 empleado.Apellidos = tbApellidos.Text;
                 empleado.Numero = tbNumero.Text;
                 empleado.Foto = tbUrlFoto.Text;
-                empleado.Huella = null;
+                empleado.Huella = _sender.Fmds[1].Bytes;
+                empleado.xmlFmd = Fmd.SerializeXml(_sender.Fmds[1]);
 
                 string destino = @"C:\Users\petit\Downloads\eorc-admin docentes\checador_fotos\" + tbUrlFoto.Text;
                 File.Copy(imgFoto.Source.ToString().Replace("file:///",""), destino, true);
@@ -104,6 +110,8 @@ namespace Checador
                     tbNumero.Text = "";
                     tbUrlFoto.Text = "";
                     imgFoto.Source = null;
+                    imgVerHuella.Visibility = Visibility.Hidden;
+                    dgEmpleados.DataContext = DatoEmpleado.MuestraEmpleados();
                 }
             }
             catch (Exception ex)
@@ -132,6 +140,10 @@ namespace Checador
 
             try
             {
+                if (empleado.Huella != null)
+                    imgVerHuella.Visibility = Visibility.Visible;
+                else
+                    imgVerHuella.Visibility = Visibility.Hidden;
                 if (empleado != null)
                 {
                     tbNombres.Text = empleado.Nombres;
@@ -173,6 +185,7 @@ namespace Checador
             enrollmentControl.ShowDialog();
             enrollmentControl.Dispose();
             this._sender = enrollmentControl._sender;
+            imgVerHuella.Visibility = Visibility.Visible;
             enrollmentControl = null;
         }
     }

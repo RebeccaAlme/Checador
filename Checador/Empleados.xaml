@@ -44,5 +44,6 @@
             VerticalAlignment="Top"
             materialDesign:HintAssist.Hint=""
             Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Column="1" Margin="0,125,0,0" HorizontalAlignment="Right" Width="145" Height="37" />
+        <Image Grid.Column="1" x:Name="imgVerHuella" Source="Resources/huella_capturada.png" Stretch="Uniform" Visibility="Hidden" HorizontalAlignment="Left" Height="26" Margin="450,102,0,0" VerticalAlignment="Top" Width="26"/>
     </Grid>
 </Window>
