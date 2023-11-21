@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Checador.Services;
+using DPUruNet;
+using System.Text.RegularExpressions;
 
 namespace Checador
 {
@@ -23,6 +25,7 @@ namespace Checador
     /// </summary>
     public partial class Empleados : Window
     {
+        public MainWindow _sender;
         public Empleados()
         {
             InitializeComponent();
@@ -109,6 +112,14 @@ namespace Checador
             }
         }
 
+        /// <summary>
+        /// Close window.
+        /// </summary>
+        private void btnBack_Click(System.Object sender, System.EventArgs e)
+        {
+            this.Close();
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             dgEmpleados.DataContext = DatoEmpleado.MuestraEmpleados();
@@ -149,17 +160,19 @@ namespace Checador
             }
         }
 
+        
         EnrollmentControl enrollmentControl; // Para saber cuando alguna huella ya se registro.
         private void btnCaptura_Click(object sender, RoutedEventArgs e)
         {
             if (enrollmentControl == null)
             {
                 enrollmentControl = new EnrollmentControl();
-                //enrollmentControl._sender = this;
+                enrollmentControl._sender = new MainWindow();
             }
 
             enrollmentControl.ShowDialog();
             enrollmentControl.Dispose();
+            this._sender = enrollmentControl._sender;
             enrollmentControl = null;
         }
     }

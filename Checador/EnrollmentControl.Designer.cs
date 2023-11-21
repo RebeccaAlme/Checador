@@ -55,6 +55,7 @@
             this.btnClose.Size = new System.Drawing.Size(90, 25);
             this.btnClose.TabIndex = 7;
             this.btnClose.Text = "Close";
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnCancel
             // 
@@ -65,6 +66,7 @@
             this.btnCancel.Size = new System.Drawing.Size(90, 25);
             this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "Cancel";
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // txtMessage
             // 
@@ -114,6 +116,7 @@
             this.Name = "EnrollmentControl";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enrollment";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EnrollmentControl_FormClosed);
             this.Load += new System.EventHandler(this.EnrollmentControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbFingerprint)).EndInit();
             this.ResumeLayout(false);

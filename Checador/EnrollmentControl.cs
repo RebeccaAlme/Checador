@@ -17,8 +17,9 @@ namespace Checador
 {
     public partial class EnrollmentControl : Form
     {
-        public SqlConnection conn = new SqlConnection("Data Source = localhost; initial catalog = Checador; Integrated Security = True");
+        public MainWindow _sender;
 
+        private DPCtlUruNet.EnrollmentControl _enrollmentControl;
         public EnrollmentControl()
         {
             InitializeComponent();
@@ -76,10 +77,11 @@ namespace Checador
         }
 
         private const int PROBABILITY_ONE = 0x7fffffff;
+        List<Fmd> preenrollmentFmds;
+        DataResult<Fmd> resultEnrollment;
         private Fmd firstFinger;
         int count = 0;
-        DataResult<Fmd> resultEnrollment;
-        List<Fmd> preenrollmentFmds;
+                
 
         /// <summary>
         /// Open a device and check result for errors.
@@ -256,14 +258,22 @@ namespace Checador
         {
             try
             {
+                //btnCancel.Enabled = true;
+
                 // Check capture quality and throw an error if bad.
-                if (CheckCaptureResult(captureResult)) return;
+                if (!CheckCaptureResult(captureResult)) return;
 
                 count++;
 
                 DataResult<Fmd> resultConversion = FeatureExtraction.CreateFmdFromFid(captureResult.Data, Constants.Formats.Fmd.ANSI);
 
-                SendMessage(Action.SendMessage, "A finger was captured.  \r\nCount:  " + (count));
+                SendMessage(Action.SendMessage, "La huella fue capturada.  \r\nCount:  " + (count));
+                
+                // Create bitmap
+                foreach (Fid.Fiv fiv in captureResult.Data.Views)
+                {
+                    SendMessage(Action.SendBitmap, CreateBitmap(fiv.RawImage, fiv.Width, fiv.Height));
+                }
 
                 if (resultConversion.ResultCode != Constants.ResultCode.DP_SUCCESS)
                 {
@@ -279,30 +289,41 @@ namespace Checador
 
                     if (resultEnrollment.ResultCode == Constants.ResultCode.DP_SUCCESS)
                     {
-                        SendMessage(Action.SendMessage, "An enrollment FMD was successfully created.");
-                        SendMessage(Action.SendMessage, "Place a finger on the reader.");
+                        firstFinger = resultEnrollment.Data;
+                        if (_sender.Fmds.Count > 0)
+                            _sender.Fmds.Clear();
+                        _sender.Fmds.Add(1,resultEnrollment.Data);
+                        SendMessage(Action.SendMessage, "El registro de la huella fue creado.");
+                        //resetea intentos
                         preenrollmentFmds.Clear();
                         count = 0;
+                        SendMessage(Action.SendBox, "La Huella ya se guardo, puedes salir de la ventana o reemplazar la huella.");
+                        
+                        //btnCancel.Enabled = false;
+                        
                         return;
                     }
                     else if (resultEnrollment.ResultCode == Constants.ResultCode.DP_ENROLLMENT_INVALID_SET)
                     {
-                        SendMessage(Action.SendMessage, "Enrollment was unsuccessful.  Please try again.");
-                        SendMessage(Action.SendMessage, "Place a finger on the reader.");
+                        SendMessage(Action.SendMessage, "El registro de la huella no fue exitoso. Vuela a intentar.");
+                        SendMessage(Action.SendMessage, "Coloque su dedo en el lector.");
                         preenrollmentFmds.Clear();
                         count = 0;
                         return;
                     }
+                    
                 }
 
-                SendMessage(Action.SendMessage, "Now place the same finger on the reader.");
+                SendMessage(Action.SendMessage, "Coloque una vez mas el mismo dedo en el lector.");
             }
             catch (Exception ex)
             {
                 // Send error message, then close form
                 SendMessage(Action.SendMessage, "Error:  " + ex.Message);
+                count = 0;
             }
         }
+
 
         //public void OnCaptured(CaptureResult captureResult)
         //{
@@ -402,10 +423,11 @@ namespace Checador
         {
             UpdateReaderState,
             SendBitmap,
-            SendMessage
+            SendMessage,
+            SendBox
         }
-        private delegate void SendMessageCallback(Action state, object payload);
 
+        private delegate void SendMessageCallback(Action state, object payload);
         //Funcion generica que imprime mensajes, dependiendo de la acción
         private void SendMessage(Action action, object payload)
         {
@@ -432,6 +454,10 @@ namespace Checador
                             pbFingerprint.Image = (Bitmap)payload;
                             pbFingerprint.Refresh();
                             break;
+                        case Action.SendBox:
+                            // Imprime la imagen de la huella
+                            MessageBox.Show((string)payload, "Mensaje");
+                            break;
                     }
                 }
             }
@@ -449,6 +475,7 @@ namespace Checador
             preenrollmentFmds = new List<Fmd>();
             pbFingerprint.Image = null;
 
+            // Establece el dispositivo a usar.
             if (CurrentReader != null)
             {
                 CurrentReader.Dispose();
@@ -462,11 +489,69 @@ namespace Checador
                 //this.Close();
             }
 
+            // Escucha por la captura de huella. 
             if (!StartCaptureAsync(this.OnCaptured))
             {
                 //this.Close();
             }
         }
 
+        /// <summary>
+        /// Cancel the capture and then close the reader.
+        /// </summary>
+        /// <param name="OnCaptured">Delegate to unhook as handler of the On_Captured event </param>
+        public void CancelCaptureAndCloseReader(Reader.CaptureCallback OnCaptured)
+        {
+            if (currentReader != null)
+            {
+                currentReader.CancelCapture();
+
+                // Dispose of reader handle and unhook reader events.
+                currentReader.Dispose();
+
+                if (reset)
+                {
+                    CurrentReader = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Close window.
+        /// </summary>
+        private void EnrollmentControl_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            CancelCaptureAndCloseReader(this.OnCaptured);
+        }
+
+        /// <summary>
+        /// Cancel enrollment when window is closed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks></remarks>
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result;
+
+            result = MessageBox.Show("¿Seguro que quieres cancelar el registro de huella?", "¿Estás seguro?", buttons, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+                _enrollmentControl.Cancel();
+            }
+        }
+
+        /// <summary>
+        /// Close window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <remarks></remarks>
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DPUruNet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,17 @@ namespace Checador
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Holds fmds enrolled by the enrollment GUI.
+        /// </summary>
+        public Dictionary<int, Fmd> Fmds
+        {
+            get { return fmds; }
+            set { fmds = value; }
+        }
+        private Dictionary<int, Fmd> fmds = new Dictionary<int, Fmd>();
+
+
         public MainWindow()
         {
             InitializeComponent();
