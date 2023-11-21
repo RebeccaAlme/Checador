@@ -20,6 +20,7 @@ using DPUruNet;
 using DPXUru;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using System.Threading;
+using Checador.Models;
 
 namespace Checador
 {
@@ -94,7 +95,7 @@ namespace Checador
         /// <returns>Returns true if successful; false if unsuccessful</returns>
         public bool OpenReader()
         {
-            using (Tracer tracer = new Tracer("Form_Main::OpenReader"))
+            using (Tracer tracer = new Tracer("Check::OpenReader"))
             {
                 reset = false;
                 Constants.ResultCode result = Constants.ResultCode.DP_DEVICE_FAILURE;
@@ -163,49 +164,49 @@ namespace Checador
             }
         }
 
-        private void identificationControl_OnIdentify(DPCtlUruNet.IdentificationControl IdentificationControl, IdentifyResult IdentificationResult)
-        {
-            if (IdentificationResult.ResultCode != Constants.ResultCode.DP_SUCCESS)
-            {
-                if (IdentificationResult.Indexes == null)
-                {
-                    if (IdentificationResult.ResultCode == Constants.ResultCode.DP_INVALID_PARAMETER)
-                    {
-                        MessageBox.Show("Warning: Fake finger was detected.");
-                    }
-                    else if (IdentificationResult.ResultCode == Constants.ResultCode.DP_NO_DATA)
-                    {
-                        MessageBox.Show("Warning: No finger was detected.");
-                    }
-                    else
-                    {
-                        if (CurrentReader != null)
-                        {
-                            CurrentReader.Dispose();
-                            CurrentReader = null;
-                        }
-                    }
-                }
-                else
-                {
-                    if (CurrentReader != null)
-                    {
-                        CurrentReader.Dispose();
-                        CurrentReader = null;
-                    }
+        //private void identificationControl_OnIdentify(DPCtlUruNet.IdentificationControl IdentificationControl, IdentifyResult IdentificationResult)
+        //{
+        //    if (IdentificationResult.ResultCode != Constants.ResultCode.DP_SUCCESS)
+        //    {
+        //        if (IdentificationResult.Indexes == null)
+        //        {
+        //            if (IdentificationResult.ResultCode == Constants.ResultCode.DP_INVALID_PARAMETER)
+        //            {
+        //                MessageBox.Show("Cuidado: Huella erronea detectada.");
+        //            }
+        //            else if (IdentificationResult.ResultCode == Constants.ResultCode.DP_NO_DATA)
+        //            {
+        //                MessageBox.Show("Cuidado: Huella no detectada.");
+        //            }
+        //            else
+        //            {
+        //                if (CurrentReader != null)
+        //                {
+        //                    CurrentReader.Dispose();
+        //                    CurrentReader = null;
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (CurrentReader != null)
+        //            {
+        //                CurrentReader.Dispose();
+        //                CurrentReader = null;
+        //            }
 
-                    MessageBox.Show("Error:  " + IdentificationResult.ResultCode);
-                }
-            }
-            else
-            {
-                CurrentReader = IdentificationControl.Reader;
-                txtMessage.Text = txtMessage.Text + "OnIdentify:  " + (IdentificationResult.Indexes.Length.Equals(0) ? "No " : "One or more ") + "matches.  Try another finger.\r\n\r\n";
-            }
+        //            MessageBox.Show("Error:  " + IdentificationResult.ResultCode);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        CurrentReader = IdentificationControl.Reader;
+        //        txtMessage.Text = txtMessage.Text + "Encontradas:  " + (IdentificationResult.Indexes.Length.Equals(0) ? "cero " : "una ") + "coincidencia.  Intenta con otro dedo.\r\n\r\n";
+        //    }
 
-            txtMessage.SelectionStart = txtMessage.SelectionLength;
-            txtMessage.ScrollToEnd();
-        }
+        //    txtMessage.SelectionStart = txtMessage.SelectionLength;
+        //    txtMessage.ScrollToEnd();
+        //}
 
         /// <summary>
         /// Check the device status before starting capture.
@@ -213,7 +214,7 @@ namespace Checador
         /// <returns></returns>
         public void GetStatus()
         {
-            using (Tracer tracer = new Tracer("Form_Main::GetStatus"))
+            using (Tracer tracer = new Tracer("Check::GetStatus"))
             {
                 Constants.ResultCode result = currentReader.GetStatus();
 
@@ -233,7 +234,7 @@ namespace Checador
                 }
                 else if ((currentReader.Status.Status != Constants.ReaderStatuses.DP_STATUS_READY))
                 {
-                    throw new Exception("Reader Status - " + currentReader.Status.Status);
+                    throw new Exception("Estatus del lector - " + currentReader.Status.Status);
                 }
             }
         }
@@ -246,7 +247,7 @@ namespace Checador
         /// <returns></returns>
         public bool CaptureFingerAsync()
         {
-            using (Tracer tracer = new Tracer("Form_Main::CaptureFingerAsync"))
+            using (Tracer tracer = new Tracer("Check::CaptureFingerAsync"))
             {
                 try
                 {
@@ -274,7 +275,7 @@ namespace Checador
         /// </summary>
         public bool CheckCaptureResult(CaptureResult captureResult)
         {
-            using (Tracer tracer = new Tracer("Form_Main::CheckCaptureResult"))
+            using (Tracer tracer = new Tracer("Check::CheckCaptureResult"))
             {
                 if (captureResult.Data == null || captureResult.ResultCode != Constants.ResultCode.DP_SUCCESS)
                 {
@@ -287,7 +288,7 @@ namespace Checador
                     // Send message if quality shows fake finger
                     if ((captureResult.Quality != Constants.CaptureQuality.DP_QUALITY_CANCELED))
                     {
-                        throw new Exception("Quality - " + captureResult.Quality);
+                        throw new Exception("Calidad - " + captureResult.Quality);
                     }
                     return false;
                 }
@@ -303,7 +304,7 @@ namespace Checador
         /// <returns>Returns true if successful; false if unsuccessful</returns>
         public bool StartCaptureAsync(Reader.CaptureCallback OnCaptured)
         {
-            using (Tracer tracer = new Tracer("EnrollmentControl::StartCaptureAsync"))
+            using (Tracer tracer = new Tracer("Check::StartCaptureAsync"))
             {
                 // Activate capture handler
                 currentReader.On_Captured += new Reader.CaptureCallback(OnCaptured);
@@ -344,22 +345,33 @@ namespace Checador
                 }
 
                 huella_capturada = resultConversion.Data;
-                //Fmd[] fmds = new Fmd[2];
-                //fmds[0] = rightIndex;
-                //fmds[1] = rightThumb;
+
+                var empleadosAll = DatoEmpleado.MuestraEmpleados();
+
+                foreach (var item in empleadosAll)
+                {
+                    if (item.xmlFmd != null && item.xmlFmd != "")
+                    {
+                        Fmd val = Fmd.DeserializeXml(item.xmlFmd);
+                        _sender.Fmds.Add(item.Id, val);
+                    }
+                }
 
                 // See the SDK documentation for an explanation on threshold scores.
                 int thresholdScore = DPFJ_PROBABILITY_ONE * 1 / 100000;
 
-                IdentifyResult identifyResult = Comparison.Identify(huella_capturada, 0, _sender.Fmds.Values, thresholdScore, 2);
+                IdentifyResult identifyResult = Comparison.Identify(huella_capturada, 0, _sender.Fmds.Values, thresholdScore, 1);
                 if (identifyResult.ResultCode != Constants.ResultCode.DP_SUCCESS)
                 {
                     Reset = true;
                     throw new Exception(identifyResult.ResultCode.ToString());
                 }
-
+                var res = _sender.Fmds.Values.ToList();
+                var res2 = res[identifyResult.Indexes[0][0]];
+                Empleado empleado = empleadosAll.Where(x => x.Id == _sender.Fmds.FirstOrDefault(y => y.Value == res2).Key).FirstOrDefault();
                 SendMessage(Action.SendMessage, "Se encontraron los siguientes usuarios: " + identifyResult.Indexes.Length.ToString());
-                SendMessage(Action.SendMessage, "Place your right index finger on the reader.");
+                
+                SendMessage(Action.SendMessage, "Hola " + empleado.Nombres + " " + empleado.Apellidos + " bienvenido. -- Hora: 00:00");
                 count = 0;
             }
             catch (Exception ex)
@@ -401,24 +413,8 @@ namespace Checador
             }
             else
             {
-                // See the SDK documentation for an explanation on threshold scores.
-                int thresholdScore = DPFJ_PROBABILITY_ONE * 1 / 100000;
-                foreach (var item in DatoEmpleado.MuestraEmpleados())
-                {
-                    //DataResult<Fmd> resultConversion = FeatureExtraction.CreateFmdFromFid(captureResult.Data, Constants.Formats.Fmd.ANSI);
-                    if (item.xmlFmd != null && item.xmlFmd != "") {
-                        Fmd val = Fmd.DeserializeXml(item.xmlFmd);
-                        _sender.Fmds.Add(item.Id, val);
-                    }                    
-                }
-
-                SendMessage(Action.SendMessage, "Pon tu dedo registrado en el lector.");
-
-                
-
+                SendMessage(Action.SendMessage, "Pon tu dedo registrado en el lector.");   
             }
-
-            //identificationControl.StartIdentification();
         }
     }
 }

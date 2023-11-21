@@ -88,7 +88,7 @@ namespace Checador
         /// <returns>Returns true if successful; false if unsuccessful</returns>
         public bool OpenReader()
         {
-            using (Tracer tracer = new Tracer("Form_Main::OpenReader"))
+            using (Tracer tracer = new Tracer("EnrollmentControl::OpenReader"))
             {
                 reset = false;
                 Constants.ResultCode result = Constants.ResultCode.DP_DEVICE_FAILURE;
@@ -113,7 +113,7 @@ namespace Checador
         /// <returns></returns>
         public void GetStatus()
         {
-            using (Tracer tracer = new Tracer("Form_Main::GetStatus"))
+            using (Tracer tracer = new Tracer("EnrollmentControl::GetStatus"))
             {
                 Constants.ResultCode result = currentReader.GetStatus();
 
@@ -145,7 +145,7 @@ namespace Checador
         /// <returns></returns>
         public bool CaptureFingerAsync()
         {
-            using (Tracer tracer = new Tracer("Form_Main::CaptureFingerAsync"))
+            using (Tracer tracer = new Tracer("EnrollmentControl::CaptureFingerAsync"))
             {
                 try
                 {
@@ -195,7 +195,7 @@ namespace Checador
         /// </summary>
         public bool CheckCaptureResult(CaptureResult captureResult)
         {
-            using (Tracer tracer = new Tracer("Form_Main::CheckCaptureResult"))
+            using (Tracer tracer = new Tracer("EnrollmentControl::CheckCaptureResult"))
             {
                 if (captureResult.Data == null || captureResult.ResultCode != Constants.ResultCode.DP_SUCCESS)
                 {
