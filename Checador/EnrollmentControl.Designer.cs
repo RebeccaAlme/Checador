@@ -39,7 +39,7 @@
             // 
             // pbFingerprint
             // 
-            this.pbFingerprint.Location = new System.Drawing.Point(784, 226);
+            this.pbFingerprint.Location = new System.Drawing.Point(384, 45);
             this.pbFingerprint.Margin = new System.Windows.Forms.Padding(4);
             this.pbFingerprint.Name = "pbFingerprint";
             this.pbFingerprint.Size = new System.Drawing.Size(160, 225);
@@ -49,7 +49,7 @@
             // 
             // btnClose
             // 
-            this.btnClose.Location = new System.Drawing.Point(629, 289);
+            this.btnClose.Location = new System.Drawing.Point(201, 208);
             this.btnClose.Margin = new System.Windows.Forms.Padding(4);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(90, 25);
@@ -60,7 +60,7 @@
             // btnCancel
             // 
             this.btnCancel.Enabled = false;
-            this.btnCancel.Location = new System.Drawing.Point(629, 257);
+            this.btnCancel.Location = new System.Drawing.Point(201, 176);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(90, 25);
@@ -71,7 +71,7 @@
             // txtMessage
             // 
             this.txtMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.txtMessage.Location = new System.Drawing.Point(619, 2);
+            this.txtMessage.Location = new System.Drawing.Point(593, 55);
             this.txtMessage.Margin = new System.Windows.Forms.Padding(4);
             this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";
@@ -85,7 +85,7 @@
             this.cboReaders.Location = new System.Drawing.Point(56, 79);
             this.cboReaders.Margin = new System.Windows.Forms.Padding(4);
             this.cboReaders.Name = "cboReaders";
-            this.cboReaders.Size = new System.Drawing.Size(211, 24);
+            this.cboReaders.Size = new System.Drawing.Size(235, 24);
             this.cboReaders.TabIndex = 23;
             // 
             // lblSelectReader

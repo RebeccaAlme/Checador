@@ -3,12 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:Checador"
         mc:Ignorable="d"
-        Title="Check" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="Check" Height="340" Width="681" Loaded="Window_Loaded" Closed="Window_Closed">
     <Grid>
-        <ComboBox x:Name="cboReaders" HorizontalAlignment="Left" Margin="37,139,0,0" VerticalAlignment="Top" Width="243"/>
-        <TextBox x:Name="txtMessage" HorizontalAlignment="Left" Margin="501,69,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="270" Height="95"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ComboBox x:Name="cboReaders" Margin="400,0,38,170" VerticalAlignment="Bottom" Height="22"/>
+        <TextBox x:Name="txtMessage" Margin="373,0,38,31" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Height="95"/>
+        <Label x:Name="lblNombres" Content="¡Hola!" Margin="44,207,415,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblApellidos" Content="" Margin="44,233,415,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblNumero" Content="Coloca tu dedo en el lector..." Margin="44,259,415,0" VerticalAlignment="Top"/>
+        <Image x:Name="imgFoto" Source="Resources/noimagen.jpg" Stretch="UniformToFill" Height="186" Margin="51,10,436,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

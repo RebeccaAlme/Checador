@@ -21,6 +21,7 @@ using DPXUru;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using System.Threading;
 using Checador.Models;
+using System.Security.Policy;
 
 namespace Checador
 {
@@ -162,6 +163,44 @@ namespace Checador
             catch (Exception)
             {
             }
+        }
+
+        public void ResetUI()
+        {
+            lblNombres.Content = "¡Hola!";
+            lblApellidos.Content = "";
+            lblNumero.Content = "Coloca tu dedo en el lector.";
+
+            BitmapImage foto = new BitmapImage();
+            foto.BeginInit();
+            foto.UriSource = new Uri("Resources/noimagen.jpg");
+            foto.EndInit();
+            foto.Freeze();
+
+            imgFoto.Source = foto;
+        }
+
+        public void Desplegar(Empleado empleado)
+        {
+            string url = "";
+
+            lblNombres.Content = empleado.Nombres;
+            lblApellidos.Content = empleado.Apellidos;
+            lblNumero.Content = empleado.Numero;
+            if (empleado.Foto != "" && empleado.Foto != null)
+            {
+                url = "C:/Checador/" + empleado.Foto;
+            }
+            else
+                url = "Resources/noimagen.jpg";
+
+            BitmapImage foto = new BitmapImage();
+            foto.BeginInit();
+            foto.UriSource = new Uri(url);
+            foto.EndInit();
+            foto.Freeze();
+
+            imgFoto.Source = foto;
         }
 
         //private void identificationControl_OnIdentify(DPCtlUruNet.IdentificationControl IdentificationControl, IdentifyResult IdentificationResult)
@@ -372,7 +411,22 @@ namespace Checador
                 SendMessage(Action.SendMessage, "Se encontraron los siguientes usuarios: " + identifyResult.Indexes.Length.ToString());
                 
                 SendMessage(Action.SendMessage, "Hola " + empleado.Nombres + " " + empleado.Apellidos + " bienvenido. -- Hora: 00:00");
-                count = 0;
+                
+                // Muestra los datos del usuario.
+                this.Dispatcher.Invoke(() =>
+                {
+                    Desplegar(empleado);
+                });
+
+                SendMessage(Action.SendMessage, "Espere 5 segundos, por favor...");
+                // Espera 5 seg.
+                System.Threading.Thread.Sleep(5000);
+                
+                // Muestra los datos por default
+                this.Dispatcher.Invoke(() =>
+                {
+                    ResetUI();
+                });
             }
             catch (Exception ex)
             {
@@ -415,6 +469,11 @@ namespace Checador
             {
                 SendMessage(Action.SendMessage, "Pon tu dedo registrado en el lector.");   
             }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+
         }
     }
 }

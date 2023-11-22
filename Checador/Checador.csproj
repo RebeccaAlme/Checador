@@ -171,6 +171,15 @@
   <ItemGroup>
     <Resource Include="Resources\checador.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\check_ui.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\empleados_admin.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\noimagen.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.9.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

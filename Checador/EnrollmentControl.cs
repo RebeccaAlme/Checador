@@ -257,8 +257,10 @@ namespace Checador
         {
             try
             {
-                //btnCancel.Enabled = true;
-
+                this.Dispatcher.Invoke(() =>
+                {
+                    btnCancel.Enabled = true;
+                });
                 // Check capture quality and throw an error if bad.
                 if (!CheckCaptureResult(captureResult)) return;
 
