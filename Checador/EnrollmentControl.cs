@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading;
@@ -257,10 +258,10 @@ namespace Checador
         {
             try
             {
-                this.Dispatcher.Invoke(() =>
-                {
-                    btnCancel.Enabled = true;
-                });
+                //this.Invoke( () =>
+                //{
+                //    btnCancel.Enabled = true;
+                //});
                 // Check capture quality and throw an error if bad.
                 if (!CheckCaptureResult(captureResult)) return;
 

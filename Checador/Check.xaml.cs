@@ -34,7 +34,7 @@ namespace Checador
         private const int DPFJ_PROBABILITY_ONE = 0x7fffffff;
         private Fmd huella_capturada;
         private int count;
-        private DPCtlUruNet.IdentificationControl identificationControl;
+        //private DPCtlUruNet.IdentificationControl identificationControl;
         public Check()
         {
             InitializeComponent();
@@ -71,13 +71,9 @@ namespace Checador
                 if (cboReaders.Items.Count > 0)
                 {
                     cboReaders.SelectedIndex = 0;
-                    //btnCaps.Enabled = true;
-                    //btnSelect.Enabled = true;
                 }
                 else
                 {
-                    //btnSelect.Enabled = false;
-                    //btnCaps.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -173,7 +169,7 @@ namespace Checador
 
             BitmapImage foto = new BitmapImage();
             foto.BeginInit();
-            foto.UriSource = new Uri("Resources/noimagen.jpg");
+            foto.UriSource = new Uri("../../Resources/noimagen.jpg",UriKind.Relative);
             foto.EndInit();
             foto.Freeze();
 
@@ -189,7 +185,7 @@ namespace Checador
             lblNumero.Content = empleado.Numero;
             if (empleado.Foto != "" && empleado.Foto != null)
             {
-                url = "C:/Checador/" + empleado.Foto;
+                url = @"C:\\Users\\petit\\Downloads\\eorc-admin docentes\\checador_fotos\\" + empleado.Foto;
             }
             else
                 url = "Resources/noimagen.jpg";
@@ -202,50 +198,6 @@ namespace Checador
 
             imgFoto.Source = foto;
         }
-
-        //private void identificationControl_OnIdentify(DPCtlUruNet.IdentificationControl IdentificationControl, IdentifyResult IdentificationResult)
-        //{
-        //    if (IdentificationResult.ResultCode != Constants.ResultCode.DP_SUCCESS)
-        //    {
-        //        if (IdentificationResult.Indexes == null)
-        //        {
-        //            if (IdentificationResult.ResultCode == Constants.ResultCode.DP_INVALID_PARAMETER)
-        //            {
-        //                MessageBox.Show("Cuidado: Huella erronea detectada.");
-        //            }
-        //            else if (IdentificationResult.ResultCode == Constants.ResultCode.DP_NO_DATA)
-        //            {
-        //                MessageBox.Show("Cuidado: Huella no detectada.");
-        //            }
-        //            else
-        //            {
-        //                if (CurrentReader != null)
-        //                {
-        //                    CurrentReader.Dispose();
-        //                    CurrentReader = null;
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            if (CurrentReader != null)
-        //            {
-        //                CurrentReader.Dispose();
-        //                CurrentReader = null;
-        //            }
-
-        //            MessageBox.Show("Error:  " + IdentificationResult.ResultCode);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        CurrentReader = IdentificationControl.Reader;
-        //        txtMessage.Text = txtMessage.Text + "Encontradas:  " + (IdentificationResult.Indexes.Length.Equals(0) ? "cero " : "una ") + "coincidencia.  Intenta con otro dedo.\r\n\r\n";
-        //    }
-
-        //    txtMessage.SelectionStart = txtMessage.SelectionLength;
-        //    txtMessage.ScrollToEnd();
-        //}
 
         /// <summary>
         /// Check the device status before starting capture.
@@ -404,35 +356,44 @@ namespace Checador
                 {
                     Reset = true;
                     throw new Exception(identifyResult.ResultCode.ToString());
+                }                
+                if (!identifyResult.Indexes.Any())
+                {
+                    SendMessage(Action.SendMessage, "No se encontraron coincidencias, intenta con otro dedo.");
+                    //SendMessage(Action.SendMessage, "Hola " + empleado.Nombres + " " + empleado.Apellidos + " bienvenido. -- Hora: 00:00");
                 }
-                var res = _sender.Fmds.Values.ToList();
-                var res2 = res[identifyResult.Indexes[0][0]];
-                Empleado empleado = empleadosAll.Where(x => x.Id == _sender.Fmds.FirstOrDefault(y => y.Value == res2).Key).FirstOrDefault();
-                SendMessage(Action.SendMessage, "Se encontraron los siguientes usuarios: " + identifyResult.Indexes.Length.ToString());
-                
-                SendMessage(Action.SendMessage, "Hola " + empleado.Nombres + " " + empleado.Apellidos + " bienvenido. -- Hora: 00:00");
-                
-                // Muestra los datos del usuario.
-                this.Dispatcher.Invoke(() =>
-                {
-                    Desplegar(empleado);
-                });
+                else {
+                    var res = _sender.Fmds.Values.ToList();
+                    var res2 = res[identifyResult.Indexes[0][0]];
+                    Empleado empleado = empleadosAll.Where(x => x.Id == _sender.Fmds.FirstOrDefault(y => y.Value == res2).Key).FirstOrDefault();
+                    SendMessage(Action.SendMessage, "Se encontraron los siguientes usuarios: " + identifyResult.Indexes.Length.ToString());
 
-                SendMessage(Action.SendMessage, "Espere 5 segundos, por favor...");
-                // Espera 5 seg.
-                System.Threading.Thread.Sleep(5000);
-                
-                // Muestra los datos por default
-                this.Dispatcher.Invoke(() =>
-                {
-                    ResetUI();
-                });
+                    SendMessage(Action.SendMessage, "Hola " + empleado.Nombres + " " + empleado.Apellidos + " bienvenido. -- Hora: 00:00");
+
+                    // Muestra los datos del usuario.
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        Desplegar(empleado);
+                    });
+
+                    SendMessage(Action.SendMessage, "Espere 5 segundos, por favor...");
+                    // Espera 5 seg.
+                    System.Threading.Thread.Sleep(5000);
+
+                    // Muestra los datos por default
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        ResetUI();
+                    });
+                    count = 0;
+                }                
             }
             catch (Exception ex)
             {
                 // Send error message, then close form
                 SendMessage(Action.SendMessage, "Error:  " + ex.Message);
             }
+            _sender.Fmds.Clear();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -458,12 +419,6 @@ namespace Checador
             if (!StartCaptureAsync(this.OnCaptured))
             {
                 this.Close();
-            }
-
-            if (identificationControl != null)
-            {
-                
-                identificationControl.Reader = CurrentReader;
             }
             else
             {
